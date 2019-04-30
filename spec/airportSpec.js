@@ -8,7 +8,13 @@ describe('Airport', function(){
 
   describe('land', function() {
     it('allows a plane to land', function(){
+      spyOn(weather,'_getRandomWeather').and.returnValue(2);
       expect(airport.land(plane)).toContain(plane);
+    });
+
+    it('prevents landing in stormy weather', function() {
+      spyOn(weather,'_getRandomWeather').and.returnValue(8);
+      expect(function() {airport.land(plane)}).toThrowError("Can't land in stormy weather");
     });
   });
 
@@ -21,7 +27,7 @@ describe('Airport', function(){
     });
 
     it('prevents take off in stormy weather', function() {
-      airport.land(plane);
+      airport.hangar.push(plane);
 
       spyOn(weather,'_getRandomWeather').and.returnValue(8);
 

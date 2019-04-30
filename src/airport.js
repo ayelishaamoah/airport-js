@@ -17,13 +17,17 @@ Weather.prototype._getRandomWeather = function(min, max) {
 }
 
 Airport.prototype.land = function(plane) {
-  this.hangar.push(plane)
-  return this.hangar;
+  if (this._isStormy() == true) {
+    throw new Error("Can't land in stormy weather");
+  } else {
+    this.hangar.push(plane)
+    return this.hangar;
+  }
 }
 
 Airport.prototype.takeOff = function(plane) {
   if (this._isStormy() == true) {
-    throw Error("Can't take off in stormy weather");
+    throw new Error("Can't take off in stormy weather");
   } else {
     var index = this.hangar.indexOf(plane);
     this.hangar.splice(index, 1);
