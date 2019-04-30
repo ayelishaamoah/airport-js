@@ -1,7 +1,8 @@
 describe('Airport', function(){
 
   beforeEach(function() {
-    airport = new Airport();
+    weather = new Weather();
+    airport = new Airport(weather);
     plane = new Plane();
   });
 
@@ -13,8 +14,19 @@ describe('Airport', function(){
 
   describe('takeOff', function() {
     it('allows a plane to take off', function(){
+      spyOn(weather,'_getRandomWeather').and.returnValue(2);
+
       airport.land(plane);
       expect(airport.takeOff(plane)).not.toContain(plane);
     });
+
+    it('prevents take off in stormy weather', function() {
+      airport.land(plane);
+
+      spyOn(weather,'_getRandomWeather').and.returnValue(8);
+
+      expect(function() { airport.takeOff(plane)}).toThrowError("Can't take off in stormy weather");
+    });
   });
+
 });
